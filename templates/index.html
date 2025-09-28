@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dota Bot Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cs/main.css') }}">
+</head>
+<body>
+    <!-- Header is now hidden via CSS -->
+    <div class="header">
+        <h1>Dota Picker</h1>
+    </div>
+
+    <!-- Floating action buttons in top right -->
+    <div class="floating-actions">
+        <button class="save-btn" onclick="saveConfiguration()">Save Configuration</button>
+        <button class="save-btn" onclick="importDefaultBuilds()">Import Default Builds</button>
+        <button class="save-btn" onclick="startCaptainsMode()">Captain's Mode</button>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="teams-container">
+                <div class="team radiant" id="radiantTeam">
+                    <div class="team-header">
+                        <div class="team-title">Radiant</div>
+                    </div>
+                    <div class="team-slots" id="radiantSlots"></div>
+                </div>
+
+                <div class="team dire" id="direTeam">
+                    <div class="team-header">
+                        <div class="team-title">Dire</div>
+                    </div>
+                    <div class="team-slots" id="direSlots"></div>
+                </div>
+
+                <div class="hero-pools-container">
+                    <div class="implemented-heroes-section">
+                        <div class="section-title">Available Heroes Pool</div>
+                        <input type="text" class="search-box" id="heroSearch" placeholder="Search heroes...">
+                        <div class="hero-pool drop-zone" id="implementedHeroesPool" data-status="available"></div>
+                    </div>
+
+                    <div class="unimplemented-heroes-section">
+                        <div class="section-title">Unimplemented Heroes</div>
+                        <div class="hero-pool drop-zone" id="unimplementedHeroesPool" data-status="unimplemented"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Original action bar is now hidden via CSS -->
+        <div class="action-bar">
+            <button class="save-btn" onclick="saveConfiguration()">Save Configuration</button>
+            <button class="save-btn" onclick="importDefaultBuilds()" style="margin-left: 20px;">Import Default Builds</button>
+        </div>
+    </div>
+
+    <!-- Status bar moved to bottom center -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-icon" id="botFolderStatus"></div>
+            <span id="botFolderPath">Detecting bot folder...</span>
+        </div>
+        <div class="status-item">
+            <button class="modal-btn secondary" onclick="selectBotFolder()">Select Folder</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <!-- Scripts - Load in dependency order -->
+    <script src="{{ url_for('static', filename='js/notificationManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dragDropManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/teamManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/teamRenderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/heroAttributeMapping.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/heroPoolRenderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/itemManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/itemRenderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/itemModal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/userManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/eventManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/draftRenderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/captainsModeManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    <!-- Item Editor Modal -->
+    <div class="preset-modal" id="itemModal">
+        <div class="modal-content" style="max-width: 1400px; width: 95%; max-height: 90vh;">
+            <h3 id="itemModalTitle">Hero Items</h3>
+            
+            <!-- User Management Section -->
+            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #c9aa71; border-radius: 5px;">
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                    <label style="color: #c9aa71;">User:</label>
+                    <select id="userSelect" style="background: rgba(0, 0, 0, 0.5); color: #c9aa71; border: 1px solid #c9aa71; padding: 5px; border-radius: 3px;">
+                    </select>
+                    <button class="modal-btn secondary" onclick="showAddUserDialog()">Add User</button>
+                    <button class="modal-btn secondary" onclick="deleteCurrentUser()">Delete User</button>
+                    <button class="modal-btn secondary" onclick="importDefaultBuilds()">Import Default Builds</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 20px; height: 500px;">
+                <!-- Current Items List -->
+                <div style="flex: 1; display: flex; flex-direction: column;">
+                    <h4>Current Items (Build Order)</h4>
+                    <div id="currentItemsList" style="flex: 1; border: 1px solid #c9aa71; border-radius: 5px; padding: 10px; overflow-y: auto;">
+                        <!-- Current items will be rendered here -->
+                    </div>
+                </div>
+                
+                <!-- Available Items -->
+                <div style="flex: 1; display: flex; flex-direction: column;">
+                    <h4>Available Items</h4>
+                    <input type="text" class="search-box" id="itemSearch" placeholder="Search items..." style="width: 100%; margin-bottom: 10px;">
+                    <div id="availableItemsList" style="flex: 1; border: 1px solid #c9aa71; border-radius: 5px; padding: 10px; overflow-y: auto;">
+                        <!-- Available items will be rendered here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeItemModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="saveHeroItems()">Save Items</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
