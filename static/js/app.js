@@ -178,5 +178,13 @@ window.saveConfiguration = () => app.saveConfiguration();
 window.selectBotFolder = () => app.selectBotFolder();
 window.importDefaultBuilds = () => app.importDefaultBuilds();
 
+window.startCaptainsMode = () => {
+    if (typeof captainsMode !== 'undefined') {
+        captainsMode.showSetupModal();
+    } else {
+        console.error('captainsMode is not defined');
+    }
+};
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => app.init());

@@ -16,7 +16,7 @@ class CaptainsModeManager {
             isActive: false
         };
 
-        // Captain's Mode draft order (official tournament format) https://www.dota2.com/patches/7.34
+        // Captain's Mode draft order (official tournament format)
         this.draftOrder = [
             {team: 'radiant', action: 'ban'},
             {team: 'dire', action: 'ban'},     
@@ -45,12 +45,12 @@ class CaptainsModeManager {
             
             {team: 'radiant', action: 'pick'},
             {team: 'dire', action: 'pick'}
-
         ];
     }
 
-    // Initialize Captain's Mode interface
+    // Initialize Captain's Mode interface - THIS IS THE METHOD THAT SHOULD BE CALLED
     showSetupModal() {
+        // Skip the setup modal and go straight to draft for now
         this.startDraft();
     }
 
@@ -305,7 +305,7 @@ class CaptainsModeManager {
         setTimeout(() => {
             const slots = document.querySelectorAll('.hero-slot');
             slots.forEach(slot => {
-                slot.style.cssText = ''; // Clear all inline styles
+                slot.style.cssText = '';
             });
             
             TeamRenderer.renderTeams();
@@ -317,5 +317,7 @@ class CaptainsModeManager {
 // Create global instance
 const captainsMode = new CaptainsModeManager();
 
-// Global functions for HTML onclick handlers
-window.startCaptainsMode = () => captainsMode.showSetupModal();
+// FIXED: Global function for HTML onclick handlers
+window.startCaptainsMode = () => {
+    captainsMode.showSetupModal();
+};
