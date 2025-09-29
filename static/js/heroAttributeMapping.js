@@ -109,7 +109,7 @@ const HERO_ATTRIBUTES = {
     'npc_dota_hero_dazzle',
     'npc_dota_hero_death_prophet',
     'npc_dota_hero_enigma',
-    'npc_dota_hero_io',  // "Wisp" is now universal
+    'npc_dota_hero_wisp',  // "Wisp" is now universal
     'npc_dota_hero_magnataur',  // Magnus
     'npc_dota_hero_marci',
     'npc_dota_hero_furion',  // Nature's Prophet (internal name is furion)

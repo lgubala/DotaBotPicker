@@ -3091,7 +3091,7 @@
         "item_overwhelming_blink",
         "item_ultimate_scepter_2",
         "item_lotus_orb",
-        "item_moon_shard"
+        "item_heart"
       ],
       "npc_dota_hero_bane": [
         "item_magic_wand",
@@ -3117,7 +3117,6 @@
         "item_abyssal_blade",
         "item_satanic",
         "item_ultimate_scepter_2",
-        "item_moon_shard",
         "item_refresher"
       ],
       "npc_dota_hero_crystal_maiden": [
@@ -3251,14 +3250,14 @@
       ],
       "npc_dota_hero_razor": [
         "item_magic_wand",
-        "item_falcon_blade",
         "item_power_treads_str",
-        "item_black_king_bar",
+        "item_blade_mail",
+        "item_aghanims_shard",
         "item_sange_and_yasha",
-        "item_assault",
+        "item_black_king_bar",
+        "item_shivas_guard",
         "item_satanic",
-        "item_ultimate_scepter_2",
-        "item_skadi"
+        "item_ultimate_scepter_2"
       ],
       "npc_dota_hero_sand_king": [
         "item_magic_wand",
@@ -3713,12 +3712,13 @@
       "npc_dota_hero_leshrac": [
         "item_magic_wand",
         "item_arcane_boots",
+        "item_orchid",
         "item_bloodstone",
         "item_cyclone",
         "item_black_king_bar",
+        "item_bloodthorn",
         "item_octarine_core",
         "item_wind_waker",
-        "item_arcane_blink",
         "item_ultimate_scepter_2",
         "item_shivas_guard"
       ],
@@ -4001,23 +4001,24 @@
       "npc_dota_hero_invoker": [
         "item_magic_wand",
         "item_boots",
-        "item_force_staff",
         "item_aghanims_shard",
         "item_black_king_bar",
         "item_travel_boots",
         "item_bloodthorn",
-        "item_hurricane_pike",
+        "item_refresher",
         "item_sheepstick",
         "item_shivas_guard",
-        "item_recipe_ultimate_scepter_2",
-        "item_moon_shard"
+        "item_recipe_ultimate_scepter_2"
       ],
       "npc_dota_hero_silencer": [
         "item_magic_wand",
         "item_power_treads_int",
+        "item_orchid",
+        "item_aghanims_shard",
         "item_hurricane_pike",
         "item_black_king_bar",
         "item_aeon_disk",
+        "item_bloodthorn",
         "item_sheepstick",
         "item_ultimate_scepter_2"
       ],
@@ -4154,15 +4155,15 @@
       "npc_dota_hero_disruptor": [
         "item_magic_wand",
         "item_arcane_boots",
-        "item_force_staff",
         "item_glimmer_cape",
-        "item_guardian_greaves",
+        "item_aether_lens",
         "item_ultimate_scepter",
+        "item_sphere",
         "item_sheepstick",
-        "item_aeon_disk",
-        "item_ultimate_scepter_2",
-        "item_hurricane_pike",
-        "item_refresher"
+        "item_refresher",
+        "item_guardian_greaves",
+        "item_ethereal_blade",
+        "item_ultimate_scepter_2"
       ],
       "npc_dota_hero_nyx_assassin": [
         "item_magic_wand",
@@ -4257,12 +4258,15 @@
         "item_quelling_blade",
         "item_magic_wand",
         "item_power_treads_agi",
+        "item_lifesteal",
         "item_sange_and_yasha",
-        "item_black_king_bar",
+        "item_aghanims_shard",
         "item_basher",
+        "item_black_king_bar",
         "item_abyssal_blade",
         "item_butterfly",
-        "item_monkey_king_bar"
+        "item_satanic",
+        "item_ultimate_scepter_2"
       ],
       "npc_dota_hero_centaur": [
         "item_magic_wand",
@@ -4404,15 +4408,14 @@
         "item_magic_wand",
         "item_boots",
         "item_bfury",
+        "item_aghanims_shard",
         "item_maelstrom",
         "item_lesser_crit",
         "item_greater_crit",
         "item_black_king_bar",
         "item_mjollnir",
-        "item_aghanims_shard",
         "item_butterfly",
-        "item_ultimate_scepter_2",
-        "item_moon_shard"
+        "item_ultimate_scepter_2"
       ],
       "npc_dota_hero_earth_spirit": [
         "item_magic_wand",
@@ -4579,14 +4582,17 @@
       "npc_dota_hero_mars": [
         "item_magic_wand",
         "item_phase_boots",
-        "item_vladmir",
-        "item_heavens_halberd",
-        "item_pipe",
+        "item_sange",
         "item_aghanims_shard",
+        "item_blink",
+        "item_sange_and_yasha",
+        "item_pipe",
         "item_black_king_bar",
         "item_ultimate_scepter_2",
-        "item_lotus_orb",
-        "item_sheepstick"
+        "item_satanic",
+        "item_abyssal_blade",
+        "item_recipe_overwhelming_blink",
+        "item_overwhelming_blink"
       ],
       "npc_dota_hero_dawnbreaker": [
         "item_magic_wand",
