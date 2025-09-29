@@ -14,11 +14,31 @@ class BotManager:
     def __init__(self):
         self.bot_folder = self.detect_bot_folder()
         self.hero_data = {}
+        self.hero_roles = {}  # FIX: Use self instead of bot_manager
         self.config = self.load_config()
         self.users_data = self.load_users()
         # Load hero data in background to avoid blocking startup
-        Thread(target=self.load_hero_data, daemon=True).start()
+        Thread(target=self.load_all_data, daemon=True).start() 
+
+    def load_all_data(self):
+        """Load both hero data and roles in sequence"""
+        self.load_hero_data()
+        self.load_role_data()
+        
+        # DEBUG: Print some heroes with their roles
+        print("\n=== DEBUG: Heroes with roles ===")
+        for hero_id, hero_data in list(self.hero_data.items())[:5]:
+            print(f"{hero_id}: roles = {hero_data.get('roles', 'NO ROLES')}")
+        print("================================\n")
     
+    def load_role_data(self):
+        """Load role data in background"""
+        self.hero_roles = self.load_hero_roles()  # FIX: Add self.
+        # Update hero_data with roles
+        for hero_id, roles in self.hero_roles.items():
+            if hero_id in self.hero_data:
+                self.hero_data[hero_id]['roles'] = roles
+        print(f"Role data loaded and assigned to {len(self.hero_roles)} heroes")
 
     def load_users(self):
         """Load or create users configuration"""
@@ -406,6 +426,47 @@ class BotManager:
         except Exception as e:
             print(f"Failed to parse hero selection: {e}")
             return {'radiant': [], 'dire': []}
+
+    def load_hero_roles(self):
+            """Load hero roles from RoleUtility.lua"""
+            roles_data = {}
+            
+            if not self.bot_folder:  # FIX: Use self
+                return roles_data
+            
+            role_utility_path = os.path.join(self.bot_folder, 'RoleUtility.lua')
+            if not os.path.exists(role_utility_path):
+                print(f"RoleUtility.lua not found at {role_utility_path}")
+                return roles_data
+            
+            try:
+                with open(role_utility_path, 'r') as f:
+                    content = f.read()
+                
+                # Parse each role list (off, mid, safe, supp)
+                role_patterns = {
+                    'off': r"X\['off'\]\s*=\s*\{(.*?)\}",
+                    'mid': r"X\['mid'\]\s*=\s*\{(.*?)\}",
+                    'safe': r"X\['safe'\]\s*=\s*\{(.*?)\}",
+                    'supp': r"X\['supp'\]\s*=\s*\{(.*?)\}"
+                }
+                
+                for role, pattern in role_patterns.items():
+                    match = re.search(pattern, content, re.DOTALL)
+                    if match:
+                        heroes_text = match.group(1)
+                        heroes = re.findall(r"'(npc_dota_hero_\w+)'", heroes_text)
+                        for hero in heroes:
+                            if hero not in roles_data:
+                                roles_data[hero] = []
+                            roles_data[hero].append(role)
+                
+                print(f"Loaded roles for {len(roles_data)} heroes")
+                return roles_data
+                
+            except Exception as e:
+                print(f"Failed to load hero roles: {e}")
+                return roles_data
     
     def save_hero_selection(self, teams):
         """Save hero selection to Lua file with backup"""
@@ -829,6 +890,11 @@ def import_default_builds():
             return jsonify({'success': False, 'error': 'Failed to import builds'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/api/hero-roles')
+def get_hero_roles():
+    """Get all hero roles"""
+    return jsonify(bot_manager.hero_roles)
 
 if __name__ == '__main__':
     print("Starting Dota Bot Manager...")

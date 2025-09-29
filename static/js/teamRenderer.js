@@ -34,6 +34,21 @@ class TeamRenderer {
                 slot.dataset.hero = hero.internal_name;
                 slot.title = hero.display_name;
 
+                // Add role badges if hero has roles
+                if (hero.roles && hero.roles.length > 0) {
+                    const rolesContainer = document.createElement('div');
+                    rolesContainer.className = 'hero-roles';
+                    
+                    hero.roles.forEach(role => {
+                        const roleBadge = document.createElement('span');
+                        roleBadge.className = `role-badge ${role}`;
+                        roleBadge.textContent = role.toUpperCase();
+                        rolesContainer.appendChild(roleBadge);
+                    });
+                    
+                    slot.appendChild(rolesContainer);
+                }
+
                 slot.addEventListener('click', (e) => {
                     e.stopPropagation();
                     ItemModal.show(hero.internal_name);
@@ -47,11 +62,6 @@ class TeamRenderer {
                     TeamManager.removeHeroFromSlot(teamName, i);
                 };
                 slot.appendChild(removeBtn);
-            } else {
-                slot.classList.add('empty');
-                slot.classList.remove('occupied');
-                slot.style.backgroundImage = '';
-                slot.innerHTML = '';
             }
 
             slot.addEventListener('dragover', DragDropManager.handleDragOver);

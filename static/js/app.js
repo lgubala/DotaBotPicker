@@ -11,6 +11,7 @@ class DotaBotManager {
     }
 
     // Initialize the application
+// In app.js, update the init method:
     async init() {
         console.log('Initializing Dota Bot Manager...');
         await this.loadHeroes();
@@ -18,11 +19,20 @@ class DotaBotManager {
         await this.checkBotFolder();
         await UserManager.loadUsers();
         TeamRenderer.renderTeams();
-        // FIX: Only render hero pools after heroes are loaded
+        
         if (Object.keys(this.heroes).length > 0) {
             HeroPoolRenderer.renderHeroPools();
         }
         EventManager.setupEventListeners();
+        
+        // Wait a bit then reload heroes to get role data
+        setTimeout(async () => {
+            await this.loadHeroes();
+            HeroPoolRenderer.renderHeroPools();
+            TeamRenderer.renderTeams();
+            console.log('Reloaded heroes with role data');
+        }, 2000);
+        
         console.log('Initialization complete');
     }
 

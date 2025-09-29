@@ -143,6 +143,56 @@ body {
     backdrop-filter: blur(10px);
 }
 
+.hero-roles {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    flex-wrap: wrap;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.role-badge {
+    background: rgba(15, 15, 35, 0.95);
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.role-badge.off {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.role-badge.mid {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.role-badge.safe {
+    border-color: #10b981;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.role-badge.supp {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.15);
+}
+
 .hero-portrait:hover {
     transform: scale(1.05) translateY(-2px);
     border-color: #3b82f6;

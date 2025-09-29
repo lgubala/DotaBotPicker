@@ -133,6 +133,21 @@ class HeroPoolRenderer {
             portrait.style.height = '50px';
         }
         
+        // Add role badges if hero has roles
+        if (hero.roles && hero.roles.length > 0) {
+            const rolesContainer = document.createElement('div');
+            rolesContainer.className = 'hero-roles';
+            
+            hero.roles.forEach(role => {
+                const roleBadge = document.createElement('span');
+                roleBadge.className = `role-badge ${role}`;
+                roleBadge.textContent = role.toUpperCase();
+                rolesContainer.appendChild(roleBadge);
+            });
+            
+            portrait.appendChild(rolesContainer);
+        }
+        
         portrait.addEventListener('dragstart', DragDropManager.handleDragStart);
         return portrait;
     }
