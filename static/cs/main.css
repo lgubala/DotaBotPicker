@@ -120,15 +120,15 @@ body {
 
 .heroes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
     max-height: 600px;
     overflow-y: auto;
 }
 
 .hero-portrait {
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
     background-size: cover;
     background-position: center;
     border: 2px solid rgba(148, 163, 184, 0.3);
@@ -237,8 +237,8 @@ body {
 }
 
 .unimplemented-heroes-section .hero-portrait {
-    width: 56px !important;
-    height: 56px !important;
+    width: 90px !important;
+    height: 90px !important;
 }
 
 .section-title {
@@ -263,8 +263,8 @@ body {
     border-radius: 12px;
     transition: all 0.3s ease;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
     padding: 20px;
 }
 
@@ -280,8 +280,8 @@ body {
 }
 
 .hero-pool .hero-portrait {
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
 }
 
 .team {
@@ -786,10 +786,10 @@ body {
     transition: all 0.3s ease;
     width: 100% !important;
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)) !important;
-    gap: 8px !important;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 12px !important;
     padding: 12px !important;
-    min-height: 88px;
+    min-height: 120px;
     border-radius: 0 0 8px 8px;
 }
 
@@ -801,8 +801,8 @@ body {
 
 .attribute-content .hero-portrait {
     transition: all 0.2s ease;
-    width: 64px !important;
-    height: 64px !important;
+    width: 100px !important;
+    height: 100px !important;
 }
 
 .attribute-content .hero-portrait:hover {
