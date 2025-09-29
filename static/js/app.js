@@ -186,5 +186,38 @@ window.startCaptainsMode = () => {
     }
 };
 
+window.clearCurrentDraft = async () => {
+    if (confirm('Are you sure you want to clear all heroes from both teams?')) {
+        // Clear the teams in memory
+        app.currentTeams = {
+            radiant: [],
+            dire: []
+        };
+        
+        // Save the empty configuration
+        try {
+            const response = await fetch('/api/teams', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(app.currentTeams)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                // Re-render the teams to show empty slots
+                TeamRenderer.renderTeams();
+                NotificationManager.show('Draft cleared successfully!');
+            } else {
+                NotificationManager.show(result.error || 'Failed to clear draft', 'error');
+            }
+        } catch (error) {
+            console.error('Clear draft error:', error);
+            NotificationManager.show('Failed to clear draft', 'error');
+        }
+    }
+};
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => app.init());

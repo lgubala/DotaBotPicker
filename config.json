@@ -1,18 +1,7 @@
 {
   "backup_count": 5,
   "last_teams": {
-    "radiant": [
-      "npc_dota_hero_pudge",
-      "npc_dota_hero_tusk",
-      "npc_dota_hero_ursa",
-      "npc_dota_hero_slark"
-    ],
-    "dire": [
-      "npc_dota_hero_slardar",
-      "npc_dota_hero_tiny",
-      "npc_dota_hero_undying",
-      "npc_dota_hero_viper",
-      "npc_dota_hero_riki"
-    ]
+    "radiant": [],
+    "dire": []
   }
 }
