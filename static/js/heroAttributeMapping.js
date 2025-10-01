@@ -61,7 +61,8 @@ const HERO_ATTRIBUTES = {
     'npc_dota_hero_troll_warlord',
     'npc_dota_hero_ursa',
     'npc_dota_hero_viper',
-    'npc_dota_hero_weaver'
+    'npc_dota_hero_weaver',
+    'npc_dota_hero_venomancer'
   ],
 
   intelligence: [
