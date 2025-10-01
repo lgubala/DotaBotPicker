@@ -107,16 +107,144 @@ class TeamRenderer {
             return;
         }
 
-        // Select random hero
-        const randomIndex = Math.floor(Math.random() * unusedHeroes.length);
-        const selectedHeroId = unusedHeroes[randomIndex];
+        // Analyze current team composition
+        const currentTeamHeroes = app.currentTeams[teamName].filter(h => h !== null);
+        const neededRoles = this.getNeededRoles(currentTeamHeroes);
+
+        let selectedHeroId;
+        let rolePrioritized = false;
+
+        // If team already has heroes, try to fill missing roles
+        if (currentTeamHeroes.length > 0 && neededRoles.length > 0) {
+            // Find heroes that match needed roles
+            const roleMatchHeroes = unusedHeroes.filter(heroId => {
+                const hero = app.heroes[heroId];
+                if (!hero.roles || hero.roles.length === 0) return false;
+                
+                // Check if hero has any of the needed roles
+                return hero.roles.some(role => neededRoles.includes(role));
+            });
+
+            if (roleMatchHeroes.length > 0) {
+                // Prioritize heroes based on most needed roles
+                const prioritizedHeroes = this.prioritizeHeroesByRole(roleMatchHeroes, neededRoles);
+                const randomIndex = Math.floor(Math.random() * prioritizedHeroes.length);
+                selectedHeroId = prioritizedHeroes[randomIndex];
+                rolePrioritized = true;
+            }
+        }
+
+        // If no role-specific hero found, select any unused hero
+        if (!selectedHeroId) {
+            const randomIndex = Math.floor(Math.random() * unusedHeroes.length);
+            selectedHeroId = unusedHeroes[randomIndex];
+        }
 
         // Add hero to slot
         TeamManager.addHeroToSlot(teamName, slotIndex, selectedHeroId);
         
-        // Show notification
+        // Show notification with role info
         const heroName = app.heroes[selectedHeroId].display_name;
-        NotificationManager.show(`${heroName} randomly selected!`);
+        const heroRoles = app.heroes[selectedHeroId].roles || [];
+        
+        if (rolePrioritized && heroRoles.length > 0) {
+            const roleText = heroRoles.map(r => r.toUpperCase()).join('/');
+            NotificationManager.show(`${heroName} (${roleText}) selected to fill missing role!`);
+        } else {
+            NotificationManager.show(`${heroName} randomly selected!`);
+        }
+    }
+
+    static getNeededRoles(currentTeamHeroes) {
+        // Ideal composition: 1 mid, 1 safe, 1 off, 2 supp
+        const idealComposition = {
+            mid: 1,
+            safe: 1,
+            off: 1,
+            supp: 2
+        };
+
+        // Count current roles in team
+        const currentRoles = {
+            mid: 0,
+            safe: 0,
+            off: 0,
+            supp: 0
+        };
+
+        currentTeamHeroes.forEach(heroId => {
+            const hero = app.heroes[heroId];
+            if (hero && hero.roles) {
+                hero.roles.forEach(role => {
+                    if (currentRoles[role] !== undefined) {
+                        currentRoles[role]++;
+                    }
+                });
+            }
+        });
+
+        // Calculate needed roles
+        const completelyMissing = [];
+        const belowIdeal = [];
+        
+        // Separate completely missing roles from below-ideal roles
+        for (const [role, idealCount] of Object.entries(idealComposition)) {
+            if (currentRoles[role] === 0) {
+                completelyMissing.push(role);
+            } else if (currentRoles[role] < idealCount) {
+                belowIdeal.push(role);
+            }
+        }
+
+        // Shuffle both arrays to add randomness
+        this.shuffleArray(completelyMissing);
+        this.shuffleArray(belowIdeal);
+
+        // Combine: completely missing roles first, then below-ideal
+        return [...completelyMissing, ...belowIdeal];
+    }
+
+    static shuffleArray(array) {
+        // Fisher-Yates shuffle algorithm
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    static prioritizeHeroesByRole(heroIds, neededRoles) {
+        // Score heroes based on how many needed roles they can fill
+        const scoredHeroes = heroIds.map(heroId => {
+            const hero = app.heroes[heroId];
+            let score = 0;
+            
+            if (hero.roles) {
+                // Higher score for heroes that match multiple needed roles
+                hero.roles.forEach(role => {
+                    if (neededRoles.includes(role)) {
+                        score++;
+                        // Extra weight for completely missing roles (first in neededRoles array)
+                        if (neededRoles.indexOf(role) === 0) {
+                            score += 2;
+                        }
+                    }
+                });
+            }
+            
+            return { heroId, score };
+        });
+
+        // Sort by score (highest first)
+        scoredHeroes.sort((a, b) => b.score - a.score);
+
+        // Return heroes with top scores (include some randomness by taking top 50%)
+        const topScoreThreshold = scoredHeroes[0].score;
+        const topHeroes = scoredHeroes
+            .filter(h => h.score >= topScoreThreshold * 0.7)
+            .map(h => h.heroId);
+
+        return topHeroes.length > 0 ? topHeroes : heroIds;
     }
 }
 
