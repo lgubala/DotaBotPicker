@@ -1259,3 +1259,68 @@ body {
     font-weight: 500;
     backdrop-filter: blur(10px);
 }
+
+/* Random button for empty hero slots */
+.slot-random-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slot-random-btn:hover {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.slot-random-btn:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* Ensure empty slots show the random button */
+.hero-slot.empty {
+    position: relative;
+}
+
+/* Update slot remove button to not conflict */
+.slot-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    display: none;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+.slot-remove-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6);
+}
+
+.hero-slot.occupied:hover .slot-remove-btn {
+    display: block;
+}

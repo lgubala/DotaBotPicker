@@ -1,4 +1,4 @@
-// Team rendering functions
+// Team rendering functions with random hero selection
 class TeamRenderer {
     // Render team slots
     static renderTeams() {
@@ -11,7 +11,6 @@ class TeamRenderer {
         slotsContainer.innerHTML = '';
 
         const teamHeroes = app.currentTeams[teamName] || [];
-        console.log(`Rendering ${teamName} team with ${teamHeroes.length} heroes:`, teamHeroes);
 
         // Always show exactly 5 slots
         for (let i = 0; i < 5; i++) {
@@ -62,6 +61,17 @@ class TeamRenderer {
                     TeamManager.removeHeroFromSlot(teamName, i);
                 };
                 slot.appendChild(removeBtn);
+            } else {
+                // Empty slot - add random button
+                const randomBtn = document.createElement('button');
+                randomBtn.className = 'slot-random-btn';
+                randomBtn.innerHTML = '🎲';
+                randomBtn.title = 'Random Hero';
+                randomBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    this.selectRandomHero(teamName, i);
+                };
+                slot.appendChild(randomBtn);
             }
 
             slot.addEventListener('dragover', DragDropManager.handleDragOver);
@@ -71,4 +81,44 @@ class TeamRenderer {
             slotsContainer.appendChild(slot);
         }
     }
+
+    static selectRandomHero(teamName, slotIndex) {
+        // Get all available heroes (status = 'available')
+        const availableHeroes = Object.entries(app.heroes)
+            .filter(([heroId, hero]) => hero.status === 'available')
+            .map(([heroId, hero]) => heroId);
+
+        if (availableHeroes.length === 0) {
+            NotificationManager.show('No available heroes to select from', 'error');
+            return;
+        }
+
+        // Get heroes already in teams to avoid duplicates
+        const usedHeroes = new Set([
+            ...app.currentTeams.radiant,
+            ...app.currentTeams.dire
+        ].filter(h => h !== null));
+
+        // Filter out already used heroes
+        const unusedHeroes = availableHeroes.filter(heroId => !usedHeroes.has(heroId));
+
+        if (unusedHeroes.length === 0) {
+            NotificationManager.show('All available heroes are already selected', 'error');
+            return;
+        }
+
+        // Select random hero
+        const randomIndex = Math.floor(Math.random() * unusedHeroes.length);
+        const selectedHeroId = unusedHeroes[randomIndex];
+
+        // Add hero to slot
+        TeamManager.addHeroToSlot(teamName, slotIndex, selectedHeroId);
+        
+        // Show notification
+        const heroName = app.heroes[selectedHeroId].display_name;
+        NotificationManager.show(`${heroName} randomly selected!`);
+    }
 }
+
+// Make function available globally
+window.selectRandomHero = (teamName, slotIndex) => TeamRenderer.selectRandomHero(teamName, slotIndex);
