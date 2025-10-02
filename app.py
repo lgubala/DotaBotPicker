@@ -23,13 +23,7 @@ class BotManager:
     def load_all_data(self):
         """Load both hero data and roles in sequence"""
         self.load_hero_data()
-        self.load_role_data()
-        
-        # DEBUG: Print some heroes with their roles
-        print("\n=== DEBUG: Heroes with roles ===")
-        for hero_id, hero_data in list(self.hero_data.items())[:5]:
-            print(f"{hero_id}: roles = {hero_data.get('roles', 'NO ROLES')}")
-        print("================================\n")
+        self.load_role_data()        
     
     def load_role_data(self):
         """Load role data in background"""
@@ -38,7 +32,6 @@ class BotManager:
         for hero_id, roles in self.hero_roles.items():
             if hero_id in self.hero_data:
                 self.hero_data[hero_id]['roles'] = roles
-        print(f"Role data loaded and assigned to {len(self.hero_roles)} heroes")
 
     def load_users(self):
         """Load or create users configuration"""
@@ -89,7 +82,6 @@ class BotManager:
         self.users_data['user_builds']['default'].update(default_builds)
         self.save_users()
         
-        print(f"Imported {imported_count} hero builds as default")
         return True
 
 
@@ -180,15 +172,12 @@ class BotManager:
         for path in possible_paths:
             hero_selection_path = os.path.join(path, 'hero_selection.lua')
             if os.path.exists(hero_selection_path):
-                print(f"Auto-detected bot folder: {path}")
                 return path
         
-        print("Bot folder not auto-detected")
         return None
     
     def load_hero_data(self):
         """Load hero information - runs in background"""
-        print("Loading hero data...")
         
         # First, get hero lists from lua file
         self.load_hero_lists_from_lua()
@@ -198,8 +187,7 @@ class BotManager:
             response = requests.get('https://api.opendota.com/api/heroes', timeout=5)
             if response.status_code == 200:
                 heroes_json = response.json()
-                print(f"Loaded {len(heroes_json)} heroes from API")
-                
+                      
                 for hero in heroes_json:
                     internal_name = hero['name']  # Already has npc_dota_hero_ prefix
                     portrait_url = f"/static/images/heroes/{internal_name}.png"
@@ -210,9 +198,6 @@ class BotManager:
                         status = 'available'
                     elif internal_name in self.unimplemented_heroes:
                         status = 'unimplemented'
-                    
-                    # DEBUG: Print status assignment (but safely)
-                    print(f"DEBUG: Assigning {status} to {internal_name}")
                     
                     self.hero_data[internal_name] = {
                         'display_name': hero['localized_name'],
@@ -228,15 +213,6 @@ class BotManager:
             print(f"API failed: {e}, using fallback data")
             self.create_fallback_hero_data()
         
-        print(f"Hero data ready: {len(self.hero_data)} heroes")
-        
-        # DEBUG: Print status distribution
-        status_counts = {}
-        for hero_data in self.hero_data.values():
-            status = hero_data.get('status', 'no_status')
-            status_counts[status] = status_counts.get(status, 0) + 1
-        print(f"Status distribution: {status_counts}")
-
 
     def load_hero_lists_from_lua(self):
         """Load allBotHeroes and UnImplementedHeroes from lua file"""
@@ -260,7 +236,6 @@ class BotManager:
             if match:
                 heroes_text = match.group(1)
                 self.all_bot_heroes = set(re.findall(r"'(npc_dota_hero_\w+)'", heroes_text))
-                print(f"Loaded {len(self.all_bot_heroes)} available bot heroes")
             
             # Extract UnImplementedHeroes
             pattern = r"local UnImplementedHeroes = \{(.*?)\};"
@@ -268,7 +243,6 @@ class BotManager:
             if match:
                 heroes_text = match.group(1)
                 self.unimplemented_heroes = set(re.findall(r"'(npc_dota_hero_\w+)'", heroes_text))
-                print(f"Loaded {len(self.unimplemented_heroes)} unimplemented heroes")
                 
         except Exception as e:
             print(f"Failed to load hero lists from lua: {e}")
@@ -290,7 +264,6 @@ class BotManager:
                     if match:
                         heroes_text = match.group(1)
                         heroes_from_lua = re.findall(r"'(npc_dota_hero_\w+)'", heroes_text)
-                        print(f"Extracted {len(heroes_from_lua)} heroes from lua file")
                 except Exception as e:
                     print(f"Failed to read lua file: {e}")
         
@@ -341,7 +314,6 @@ class BotManager:
                         if match:
                             heroes_text = match.group(1)
                             heroes_from_lua = re.findall(r"'(npc_dota_hero_\w+)'", heroes_text)
-                            print(f"Extracted {len(heroes_from_lua)} heroes from lua file")
                     except Exception as e:
                         print(f"Failed to read lua file: {e}")
             
@@ -436,7 +408,6 @@ class BotManager:
             
             role_utility_path = os.path.join(self.bot_folder, 'RoleUtility.lua')
             if not os.path.exists(role_utility_path):
-                print(f"RoleUtility.lua not found at {role_utility_path}")
                 return roles_data
             
             try:
@@ -461,7 +432,6 @@ class BotManager:
                                 roles_data[hero] = []
                             roles_data[hero].append(role)
                 
-                print(f"Loaded roles for {len(roles_data)} heroes")
                 return roles_data
                 
             except Exception as e:
@@ -591,7 +561,6 @@ class BotManager:
             with open(hero_selection_path, 'w') as f:
                 f.write(content)
             
-            print(f"Moved {hero_id} to {new_status}")
             if hero_id in self.hero_data:
                 self.hero_data[hero_id]['status'] = new_status
             return True
@@ -616,10 +585,6 @@ class BotManager:
         # Convert internal name to filename (remove npc_dota_hero_ prefix)
         hero_name = hero_id.replace('npc_dota_hero_', '')
         item_file_path = os.path.join(self.bot_folder, 'builds', f'item_build_{hero_name}.lua')
-        print(f"Looking for hero: {hero_id}")
-        print(f"Converted to filename: {hero_name}")
-        print(f"Full file path: {item_file_path}")
-        print(f"File exists: {os.path.exists(item_file_path)}")
 
         if not os.path.exists(item_file_path):
             return []
@@ -627,14 +592,10 @@ class BotManager:
         try:
             with open(item_file_path, 'r') as f:
                 content = f.read()
-
-            print(f"File content preview (first 200 chars):")
-            print(content[:200])
             
             # Extract items array using regex
             pattern = r'X\["items"\]\s*=\s*\{(.*?)\};'
             match = re.search(pattern, content, re.DOTALL)
-            print(f"Regex match found: {match is not None}")
             if match:
                 items_text = match.group(1)
                 # Extract item names - only active items
