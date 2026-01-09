@@ -2,8 +2,16 @@
   "backup_count": 5,
   "last_teams": {
     "radiant": [
-      "npc_dota_hero_hoodwink"
+      "npc_dota_hero_tusk",
+      "npc_dota_hero_disruptor",
+      "npc_dota_hero_kunkka",
+      "npc_dota_hero_dark_seer"
     ],
-    "dire": []
+    "dire": [
+      "npc_dota_hero_abyssal_underlord",
+      "npc_dota_hero_silencer",
+      "npc_dota_hero_elder_titan",
+      "npc_dota_hero_clinkz"
+    ]
   }
 }

@@ -28,6 +28,7 @@ const HERO_ATTRIBUTES = {
     'npc_dota_hero_treant',
     'npc_dota_hero_tusk',
     'npc_dota_hero_undying',
+    'npc_dota_hero_abyssal_underlord',
     'npc_dota_hero_wraith_king'  // formerly skeleton_king
   ],
 
@@ -63,7 +64,8 @@ const HERO_ATTRIBUTES = {
     'npc_dota_hero_ursa',
     'npc_dota_hero_viper',
     'npc_dota_hero_weaver',
-    'npc_dota_hero_venomancer'
+    'npc_dota_hero_venomancer',
+    'npc_dota_hero_vengefulspirit'
   ],
 
   intelligence: [
@@ -95,7 +97,9 @@ const HERO_ATTRIBUTES = {
     'npc_dota_hero_tinker',
     'npc_dota_hero_warlock',
     'npc_dota_hero_witch_doctor',
-    'npc_dota_hero_zuus'
+    'npc_dota_hero_zuus',
+    'npc_dota_hero_earth_spirit',
+    'npc_dota_hero_dark_seer'
   ],
 
   universal: [
